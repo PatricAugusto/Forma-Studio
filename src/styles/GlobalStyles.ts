@@ -2,7 +2,6 @@ import { createGlobalStyle } from 'styled-components'
 import type { Theme } from './theme'
 
 export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=JetBrains+Mono:wght@400;500&display=swap');
 
   *, *::before, *::after {
     box-sizing: border-box;
@@ -33,8 +32,6 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
     line-height: 1.6;
     overflow-x: hidden;
   }
-
-  * { cursor: none !important; }
 
   a {
     color: inherit;

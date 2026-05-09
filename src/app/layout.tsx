@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import { ThemeProvider } from 'styled-components'
 import StyledComponentsRegistry from '@/lib/registry'
-import { GlobalStyles } from '@/styles/GlobalStyles'
-import { theme } from '@/styles/theme'
+import Providers from '@/lib/providers'
 
 export const metadata: Metadata = {
   title: 'forma. — product design studio',
@@ -16,12 +14,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <StyledComponentsRegistry>
-          <ThemeProvider theme={theme}>
-            <GlobalStyles theme={theme} />
+          <Providers>
             {children}
-          </ThemeProvider>
+          </Providers>
         </StyledComponentsRegistry>
       </body>
     </html>
