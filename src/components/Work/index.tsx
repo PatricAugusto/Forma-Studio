@@ -1,45 +1,104 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import type { Variants } from 'framer-motion'
-import styled from 'styled-components'
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { Variants } from "framer-motion";
+import styled from "styled-components";
+
+import AurumFinance from "./illustrations/AurumFinance";
+import NordeStudio from "./illustrations/NordeStudio";
+import PulseHealth from "./illustrations/PulseHealth";
+import OrbitMotion from "./illustrations/OrbitMotion";
+import SerraCollective from "./illustrations/SerraCollective";
+import VelaSystems from "./illustrations/VelaSystems";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
-type Category = 'All' | 'Branding' | 'Digital' | 'Motion'
+type Category = "All" | "Branding" | "Digital" | "Motion";
 
 interface Project {
-  id: string
-  title: string
-  category: Category
-  year: string
-  span: 'wide' | 'narrow'
-  index: number
+  id: string;
+  title: string;
+  category: Category;
+  year: string;
+  span: "wide" | "narrow";
+  index: number;
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const PROJECTS: Project[] = [
-  { id: 'p1', title: 'Aurum Finance',   category: 'Digital',   year: '2024', span: 'wide',   index: 0 },
-  { id: 'p2', title: 'Norde Studio',    category: 'Branding',  year: '2024', span: 'narrow', index: 1 },
-  { id: 'p3', title: 'Pulse Health',    category: 'Digital',   year: '2023', span: 'narrow', index: 2 },
-  { id: 'p4', title: 'Orbit Motion',    category: 'Motion',    year: '2023', span: 'wide',   index: 3 },
-  { id: 'p5', title: 'Serra Collective',category: 'Branding',  year: '2024', span: 'narrow', index: 4 },
-  { id: 'p6', title: 'Vela Systems',    category: 'Digital',   year: '2022', span: 'narrow', index: 5 },
-]
+  {
+    id: "p1",
+    title: "Aurum Finance",
+    category: "Digital",
+    year: "2024",
+    span: "wide",
+    index: 0,
+  },
+  {
+    id: "p2",
+    title: "Norde Studio",
+    category: "Branding",
+    year: "2024",
+    span: "narrow",
+    index: 1,
+  },
+  {
+    id: "p3",
+    title: "Pulse Health",
+    category: "Digital",
+    year: "2023",
+    span: "narrow",
+    index: 2,
+  },
+  {
+    id: "p4",
+    title: "Orbit Motion",
+    category: "Motion",
+    year: "2023",
+    span: "wide",
+    index: 3,
+  },
+  {
+    id: "p5",
+    title: "Serra Collective",
+    category: "Branding",
+    year: "2024",
+    span: "narrow",
+    index: 4,
+  },
+  {
+    id: "p6",
+    title: "Vela Systems",
+    category: "Digital",
+    year: "2022",
+    span: "narrow",
+    index: 5,
+  },
+];
 
-const CATEGORIES: Category[] = ['All', 'Branding', 'Digital', 'Motion']
+const CATEGORIES: Category[] = ["All", "Branding", "Digital", "Motion"];
+
+const ILLUSTRATIONS: Record<string, React.ComponentType> = {
+  p1: AurumFinance,
+  p2: NordeStudio,
+  p3: PulseHealth,
+  p4: OrbitMotion,
+  p5: SerraCollective,
+  p6: VelaSystems,
+};
 
 // ─── Styled Components ────────────────────────────────────────────────────────
 
 const WorkSection = styled.section`
   padding: ${({ theme }) => theme.spacing.xl} ${({ theme }) => theme.spacing.lg};
-  
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.sm};
+    padding: ${({ theme }) => theme.spacing.lg}
+      ${({ theme }) => theme.spacing.sm};
   }
-`
+`;
 
 const SectionHeader = styled.div`
   display: flex;
@@ -52,7 +111,7 @@ const SectionHeader = styled.div`
     align-items: flex-start;
     gap: ${({ theme }) => theme.spacing.md};
   }
-`
+`;
 
 const SectionLabel = styled(motion.p)`
   font-family: ${({ theme }) => theme.fonts.mono};
@@ -63,10 +122,10 @@ const SectionLabel = styled(motion.p)`
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 
   &::before {
-    content: '02 — ';
+    content: "02 — ";
     color: ${({ theme }) => theme.colors.muted};
   }
-`
+`;
 
 const SectionTitle = styled(motion.h2)`
   font-family: ${({ theme }) => theme.fonts.display};
@@ -74,13 +133,13 @@ const SectionTitle = styled(motion.h2)`
   line-height: 0.9;
   color: ${({ theme }) => theme.colors.text};
   letter-spacing: -0.02em;
-`
+`;
 
 const FilterRow = styled(motion.div)`
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
   flex-wrap: wrap;
-`
+`;
 
 const FilterButton = styled.button<{ $active: boolean }>`
   font-family: ${({ theme }) => theme.fonts.mono};
@@ -88,23 +147,24 @@ const FilterButton = styled.button<{ $active: boolean }>`
   letter-spacing: 0.15em;
   text-transform: uppercase;
   padding: 0.5rem 1.2rem;
-  border: 1px solid ${({ $active, theme }) =>
-    $active ? theme.colors.accent : theme.colors.border};
+  border: 1px solid
+    ${({ $active, theme }) =>
+      $active ? theme.colors.accent : theme.colors.border};
   color: ${({ $active, theme }) =>
     $active ? theme.colors.bg : theme.colors.muted};
   background: ${({ $active, theme }) =>
-    $active ? theme.colors.accent : 'transparent'};
+    $active ? theme.colors.accent : "transparent"};
   transition:
     border-color ${({ theme }) => theme.transitions.fast},
-    color        ${({ theme }) => theme.transitions.fast},
-    background   ${({ theme }) => theme.transitions.fast};
+    color ${({ theme }) => theme.transitions.fast},
+    background ${({ theme }) => theme.transitions.fast};
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.accent};
     color: ${({ $active, theme }) =>
       $active ? theme.colors.bg : theme.colors.accent};
   }
-`
+`;
 
 const Grid = styled(motion.div)`
   display: grid;
@@ -114,14 +174,14 @@ const Grid = styled(motion.div)`
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
   }
-`
+`;
 
-const ProjectCard = styled(motion.article)<{ $span: 'wide' | 'narrow' }>`
-  grid-column: span ${({ $span }) => ($span === 'wide' ? 7 : 5)};
+const ProjectCard = styled(motion.article)<{ $span: "wide" | "narrow" }>`
+  grid-column: span ${({ $span }) => ($span === "wide" ? 7 : 5)};
   position: relative;
   overflow: hidden;
   background: ${({ theme }) => theme.colors.surface};
-  aspect-ratio: ${({ $span }) => ($span === 'wide' ? '16/9' : '4/5')};
+  aspect-ratio: ${({ $span }) => ($span === "wide" ? "16/9" : "4/5")};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-column: span 1;
@@ -137,52 +197,7 @@ const ProjectCard = styled(motion.article)<{ $span: 'wide' | 'narrow' }>`
   &:focus-within .reveal {
     transform: translateY(0);
   }
-`
-
-const CardPlaceholder = styled.div<{ $index: number }>`
-  width: 100%;
-  height: 100%;
-  background: ${({ theme, $index }) => {
-    const shades = [
-      theme.colors.surface,
-      '#161616',
-      '#191919',
-      '#141414',
-      '#171717',
-      '#131313',
-    ]
-    return shades[$index % shades.length]
-  }};
-  position: relative;
-  transition: transform ${({ theme }) => theme.transitions.smooth};
-
-  /* Padrão geométrico neo-minimalista */
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(
-        ${({ $index }) => 30 + $index * 15}deg,
-        transparent 40%,
-        rgba(255,255,255,0.015) 40%,
-        rgba(255,255,255,0.015) 60%,
-        transparent 60%
-      );
-  }
-
-  &::after {
-    content: '${({ $index }) => String($index + 1).padStart(2, '0')}';
-    position: absolute;
-    bottom: ${({ theme }) => theme.spacing.md};
-    right: ${({ theme }) => theme.spacing.md};
-    font-family: ${({ theme }) => theme.fonts.display};
-    font-size: 5rem;
-    color: rgba(255,255,255,0.04);
-    line-height: 1;
-    pointer-events: none;
-  }
-`
+`;
 
 const CardReveal = styled.div`
   position: absolute;
@@ -192,13 +207,13 @@ const CardReveal = styled.div`
   padding: ${({ theme }) => theme.spacing.md};
   background: linear-gradient(
     to top,
-    rgba(10,10,10,0.95) 0%,
-    rgba(10,10,10,0.7) 60%,
+    rgba(10, 10, 10, 0.95) 0%,
+    rgba(10, 10, 10, 0.7) 60%,
     transparent 100%
   );
   transform: translateY(30%);
   transition: transform ${({ theme }) => theme.transitions.smooth};
-`
+`;
 
 const CardCategory = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
@@ -208,7 +223,7 @@ const CardCategory = styled.span`
   color: ${({ theme }) => theme.colors.accent};
   display: block;
   margin-bottom: 0.4rem;
-`
+`;
 
 const CardTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.display};
@@ -216,21 +231,21 @@ const CardTitle = styled.h3`
   color: ${({ theme }) => theme.colors.text};
   letter-spacing: 0.02em;
   line-height: 1;
-`
+`;
 
 const CardMeta = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 0.5rem;
-`
+`;
 
 const CardYear = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 0.65rem;
   color: ${({ theme }) => theme.colors.muted};
   letter-spacing: 0.1em;
-`
+`;
 
 const CardArrow = styled.span`
   font-size: 1rem;
@@ -241,14 +256,14 @@ const CardArrow = styled.span`
   ${ProjectCard}:hover & {
     transform: translate(3px, -3px);
   }
-`
+`;
 
 // ─── Variantes ────────────────────────────────────────────────────────────────
 
 const sectionVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
-}
+};
 
 const fadeUpVariants: Variants = {
   hidden: { y: 32, opacity: 0 },
@@ -260,7 +275,7 @@ const fadeUpVariants: Variants = {
       ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   },
-}
+};
 
 const cardVariants: Variants = {
   hidden: { y: 48, opacity: 0 },
@@ -278,16 +293,16 @@ const cardVariants: Variants = {
     opacity: 0,
     transition: { duration: 0.3 },
   },
-}
+};
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export default function Work() {
-  const [activeFilter, setActiveFilter] = useState<Category>('All')
+  const [activeFilter, setActiveFilter] = useState<Category>("All");
 
   const filtered = PROJECTS.filter(
-    (p) => activeFilter === 'All' || p.category === activeFilter
-  )
+    (p) => activeFilter === "All" || p.category === activeFilter,
+  );
 
   return (
     <WorkSection data-testid="work-section">
@@ -336,7 +351,7 @@ export default function Work() {
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-5%' }}
+        viewport={{ once: true, margin: "-5%" }}
         data-testid="projects-grid"
       >
         <AnimatePresence mode="popLayout">
@@ -355,7 +370,10 @@ export default function Work() {
               role="article"
               aria-label={`${project.title} — ${project.category}`}
             >
-              <CardPlaceholder $index={project.index} />
+              {(() => {
+                const Illustration = ILLUSTRATIONS[project.id];
+                return Illustration ? <Illustration /> : null;
+              })()}
 
               <CardReveal className="reveal">
                 <CardCategory>{project.category}</CardCategory>
@@ -370,5 +388,5 @@ export default function Work() {
         </AnimatePresence>
       </Grid>
     </WorkSection>
-  )
+  );
 }
