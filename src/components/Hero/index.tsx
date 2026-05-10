@@ -32,11 +32,12 @@ const HeroSection = styled.section`
   justify-content: flex-end;
   padding: 0 ${({ theme }) => theme.spacing.lg};
   padding-bottom: ${({ theme }) => theme.spacing.lg};
+  padding-top: 72px;
   overflow: hidden;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: 0 ${({ theme }) => theme.spacing.sm};
-    padding-bottom: ${({ theme }) => theme.spacing.md};
+    padding: 72px ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    min-height: 100svh;
   }
 `
 
@@ -61,16 +62,16 @@ const OrbContainer = styled.div`
   position: absolute;
   top: 12%;
   right: 8%;
-  width: 420px;
-  height: 420px;
+  width: 380px;
+  height: 380px;
   pointer-events: none;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 200px;
-    height: 200px;
-    top: 8%;
-    right: -5%;
-    opacity: 0.4;
+    width: 160px;
+    height: 160px;
+    top: 80px;
+    right: -20px;
+    opacity: 0.25;
   }
 `
 
@@ -134,7 +135,7 @@ const HeadlineWrapper = styled.div`
 
 const HeadlineLine = styled(motion.h1)`
   font-family: ${({ theme }) => theme.fonts.display};
-  font-size: clamp(4.5rem, 12vw, 13rem);
+  font-size: clamp(3.2rem, 11vw, 13rem);
   line-height: 0.88;
   letter-spacing: -0.02em;
   color: ${({ theme }) => theme.colors.text};
@@ -143,15 +144,16 @@ const HeadlineLine = styled(motion.h1)`
   &.accent-line {
     color: transparent;
     -webkit-text-stroke: 1px ${({ theme }) => theme.colors.border};
-    padding-left: clamp(2rem, 8vw, 10rem);
+    padding-left: clamp(1.5rem, 6vw, 10rem);
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     white-space: normal;
-    font-size: clamp(3.5rem, 16vw, 5rem);
+    word-break: break-word;
+    font-size: clamp(3rem, 15vw, 4.5rem);
 
     &.accent-line {
-      padding-left: clamp(1rem, 5vw, 3rem);
+      padding-left: clamp(1rem, 4vw, 2rem);
     }
   }
 `
@@ -161,25 +163,37 @@ const BottomRow = styled(motion.div)`
   align-items: flex-end;
   justify-content: space-between;
   margin-top: ${({ theme }) => theme.spacing.lg};
+  gap: ${({ theme }) => theme.spacing.md};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
     align-items: flex-start;
-    gap: ${({ theme }) => theme.spacing.md};
+    gap: ${({ theme }) => theme.spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.md};
   }
 `
 
 const Description = styled(motion.p)`
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 300;
   color: ${({ theme }) => theme.colors.muted};
   max-width: 320px;
   line-height: 1.7;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: 0.85rem;
+    max-width: 100%;
+  }
 `
 
 const StatsRow = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.lg};
+  flex-shrink: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    gap: ${({ theme }) => theme.spacing.md};
+  }
 `
 
 const StatItem = styled(motion.div)`
@@ -216,6 +230,10 @@ const ScrollIndicator = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: none;
+  }
 
   span {
     font-family: ${({ theme }) => theme.fonts.mono};

@@ -139,7 +139,16 @@ const FilterRow = styled(motion.div)`
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
   flex-wrap: wrap;
-`;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+`
 
 const FilterButton = styled.button<{ $active: boolean }>`
   font-family: ${({ theme }) => theme.fonts.mono};
@@ -147,24 +156,24 @@ const FilterButton = styled.button<{ $active: boolean }>`
   letter-spacing: 0.15em;
   text-transform: uppercase;
   padding: 0.5rem 1.2rem;
-  border: 1px solid
-    ${({ $active, theme }) =>
-      $active ? theme.colors.accent : theme.colors.border};
+  flex-shrink: 0;
+  border: 1px solid ${({ $active, theme }) =>
+    $active ? theme.colors.accent : theme.colors.border};
   color: ${({ $active, theme }) =>
     $active ? theme.colors.bg : theme.colors.muted};
   background: ${({ $active, theme }) =>
-    $active ? theme.colors.accent : "transparent"};
+    $active ? theme.colors.accent : 'transparent'};
   transition:
     border-color ${({ theme }) => theme.transitions.fast},
-    color ${({ theme }) => theme.transitions.fast},
-    background ${({ theme }) => theme.transitions.fast};
+    color        ${({ theme }) => theme.transitions.fast},
+    background   ${({ theme }) => theme.transitions.fast};
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.accent};
     color: ${({ $active, theme }) =>
       $active ? theme.colors.bg : theme.colors.accent};
   }
-`;
+`
 
 const Grid = styled(motion.div)`
   display: grid;
@@ -172,20 +181,34 @@ const Grid = styled(motion.div)`
   gap: ${({ theme }) => theme.spacing.sm};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
   }
 `;
 
-const ProjectCard = styled(motion.article)<{ $span: "wide" | "narrow" }>`
-  grid-column: span ${({ $span }) => ($span === "wide" ? 7 : 5)};
+const ProjectCard = styled(motion.article)<{ $span: 'wide' | 'narrow' }>`
+  grid-column: span ${({ $span }) => ($span === 'wide' ? 7 : 5)};
   position: relative;
   overflow: hidden;
   background: ${({ theme }) => theme.colors.surface};
-  aspect-ratio: ${({ $span }) => ($span === "wide" ? "16/9" : "4/5")};
+  aspect-ratio: ${({ $span }) => ($span === 'wide' ? '16/9' : '4/5')};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-column: span 1;
+    aspect-ratio: 4/3;
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-column: span 1;
-    aspect-ratio: 4/3;
+    aspect-ratio: 3/2;
+  }
+
+  /* Reveal sempre visível no touch */
+  @media (hover: none) {
+    .reveal { transform: translateY(0); }
   }
 
   &:hover img,
@@ -197,7 +220,7 @@ const ProjectCard = styled(motion.article)<{ $span: "wide" | "narrow" }>`
   &:focus-within .reveal {
     transform: translateY(0);
   }
-`;
+`
 
 const CardReveal = styled.div`
   position: absolute;

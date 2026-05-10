@@ -22,6 +22,7 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
     font-size: 16px;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -44,8 +45,18 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
     font-family: inherit;
   }
 
+  /* Remove tap highlight no mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   ::selection {
     background: ${({ theme }) => theme.colors.accent};
     color: ${({ theme }) => theme.colors.bg};
+  }
+
+   /* Melhora scroll em iOS */
+  html, body {
+    -webkit-overflow-scrolling: touch;
   }
 `

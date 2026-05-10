@@ -96,17 +96,22 @@ const FooterEyebrow = styled(motion.p)`
 
 const BigCTA = styled(motion.h2)`
   font-family: ${({ theme }) => theme.fonts.display};
-  font-size: clamp(5rem, 16vw, 18rem);
+  font-size: clamp(3.5rem, 13vw, 18rem);
   line-height: 0.85;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   position: relative;
   cursor: none;
+  word-break: break-word;
 
   span.cursor-blink {
     color: ${({ theme }) => theme.colors.accent};
     animation: ${blink} 1.2s step-end infinite;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
   }
 `
 
@@ -117,8 +122,8 @@ const MagneticWrapper = styled.div`
 `
 
 const CTACircle = styled(motion.a)`
-  width: 180px;
-  height: 180px;
+  width: clamp(120px, 20vw, 180px);
+  height: clamp(120px, 20vw, 180px);
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.border};
   display: flex;
@@ -140,17 +145,9 @@ const CTACircle = styled(motion.a)`
     transition: transform ${({ theme }) => theme.transitions.smooth};
   }
 
-  &:hover::before {
-    transform: scale(1);
-  }
-
-  &:hover span {
-    color: ${({ theme }) => theme.colors.bg};
-  }
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.accent};
-  }
+  &:hover::before { transform: scale(1); }
+  &:hover span    { color: ${({ theme }) => theme.colors.bg}; }
+  &:hover         { border-color: ${({ theme }) => theme.colors.accent}; }
 `
 
 const CTALabel = styled.span`
@@ -182,10 +179,11 @@ const FooterBottom = styled.div`
   justify-content: space-between;
   padding-top: ${({ theme }) => theme.spacing.md};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
+  gap: ${({ theme }) => theme.spacing.md};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    flex-direction: column;
-    gap: ${({ theme }) => theme.spacing.md};
+    flex-direction: column-reverse;
+    align-items: center;
     text-align: center;
   }
 `
@@ -201,6 +199,12 @@ const Copyright = styled.p`
 const SocialList = styled.nav`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    gap: ${({ theme }) => theme.spacing.sm};
+  }
 `
 
 const SocialItem = styled(motion.a)`
