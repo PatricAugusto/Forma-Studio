@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Variants } from "framer-motion";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import AurumFinance from "./illustrations/AurumFinance";
 import NordeStudio from "./illustrations/NordeStudio";
@@ -135,20 +135,43 @@ const SectionTitle = styled(motion.h2)`
   letter-spacing: -0.02em;
 `;
 
-const FilterRow = styled(motion.div)`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.sm};
-  flex-wrap: wrap;
+const FilterCarouselWrapper = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 480px;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
+    max-width: 100%;
   }
-`
+`;
+
+const scrollLoop = keyframes`
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+`;
+
+const FilterTrack = styled.div<{ $paused: boolean }>`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.sm};
+  width: max-content;
+  animation: ${scrollLoop} 8s linear infinite;
+  animation-play-state: ${({ $paused }) => ($paused ? "paused" : "running")};
+`;
 
 const FilterButton = styled.button<{ $active: boolean }>`
   font-family: ${({ theme }) => theme.fonts.mono};
@@ -157,23 +180,31 @@ const FilterButton = styled.button<{ $active: boolean }>`
   text-transform: uppercase;
   padding: 0.5rem 1.2rem;
   flex-shrink: 0;
-  border: 1px solid ${({ $active, theme }) =>
-    $active ? theme.colors.accent : theme.colors.border};
+  border: 1px solid
+    ${({ $active, theme }) =>
+      $active ? theme.colors.accent : theme.colors.border};
   color: ${({ $active, theme }) =>
     $active ? theme.colors.bg : theme.colors.muted};
   background: ${({ $active, theme }) =>
-    $active ? theme.colors.accent : 'transparent'};
+    $active ? theme.colors.accent : "transparent"};
   transition:
     border-color ${({ theme }) => theme.transitions.fast},
-    color        ${({ theme }) => theme.transitions.fast},
-    background   ${({ theme }) => theme.transitions.fast};
+    color ${({ theme }) => theme.transitions.fast},
+    background ${({ theme }) => theme.transitions.fast},
+    transform ${({ theme }) => theme.transitions.fast};
+  white-space: nowrap;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.accent};
     color: ${({ $active, theme }) =>
       $active ? theme.colors.bg : theme.colors.accent};
+    transform: scale(1.04);
   }
-`
+
+  &:active {
+    transform: scale(0.97);
+  }
+`;
 
 const Grid = styled(motion.div)`
   display: grid;
@@ -189,12 +220,12 @@ const Grid = styled(motion.div)`
   }
 `;
 
-const ProjectCard = styled(motion.article)<{ $span: 'wide' | 'narrow' }>`
-  grid-column: span ${({ $span }) => ($span === 'wide' ? 7 : 5)};
+const ProjectCard = styled(motion.article)<{ $span: "wide" | "narrow" }>`
+  grid-column: span ${({ $span }) => ($span === "wide" ? 7 : 5)};
   position: relative;
   overflow: hidden;
   background: ${({ theme }) => theme.colors.surface};
-  aspect-ratio: ${({ $span }) => ($span === 'wide' ? '16/9' : '4/5')};
+  aspect-ratio: ${({ $span }) => ($span === "wide" ? "16/9" : "4/5")};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-column: span 1;
@@ -208,7 +239,9 @@ const ProjectCard = styled(motion.article)<{ $span: 'wide' | 'narrow' }>`
 
   /* Reveal sempre visível no touch */
   @media (hover: none) {
-    .reveal { transform: translateY(0); }
+    .reveal {
+      transform: translateY(0);
+    }
   }
 
   &:hover img,
@@ -220,7 +253,7 @@ const ProjectCard = styled(motion.article)<{ $span: 'wide' | 'narrow' }>`
   &:focus-within .reveal {
     transform: translateY(0);
   }
-`
+`;
 
 const CardReveal = styled.div`
   position: absolute;
@@ -323,6 +356,8 @@ const cardVariants: Variants = {
 export default function Work() {
   const [activeFilter, setActiveFilter] = useState<Category>("All");
 
+  const [paused, setPaused] = useState(false);
+
   const filtered = PROJECTS.filter(
     (p) => activeFilter === "All" || p.category === activeFilter,
   );
@@ -349,25 +384,47 @@ export default function Work() {
           </SectionTitle>
         </div>
 
-        <FilterRow
+        <motion.div
           variants={fadeUpVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           data-testid="filter-row"
         >
-          {CATEGORIES.map((cat) => (
-            <FilterButton
-              key={cat}
-              $active={activeFilter === cat}
-              onClick={() => setActiveFilter(cat)}
-              data-testid={`filter-${cat.toLowerCase()}`}
-              aria-pressed={activeFilter === cat}
-            >
-              {cat}
-            </FilterButton>
-          ))}
-        </FilterRow>
+          <FilterCarouselWrapper
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onTouchStart={() => setPaused(true)}
+            onTouchEnd={() => setPaused(false)}
+          >
+            <FilterTrack $paused={paused}>
+              {/* Primeira cópia */}
+              {CATEGORIES.map((cat) => (
+                <FilterButton
+                  key={`a-${cat}`}
+                  $active={activeFilter === cat}
+                  onClick={() => setActiveFilter(cat)}
+                  data-testid={`filter-${cat.toLowerCase()}`}
+                  aria-pressed={activeFilter === cat}
+                >
+                  {cat}
+                </FilterButton>
+              ))}
+              {/* Segunda cópia — cria o loop infinito */}
+              {CATEGORIES.map((cat) => (
+                <FilterButton
+                  key={`b-${cat}`}
+                  $active={activeFilter === cat}
+                  onClick={() => setActiveFilter(cat)}
+                  aria-hidden="true"
+                  tabIndex={-1}
+                >
+                  {cat}
+                </FilterButton>
+              ))}
+            </FilterTrack>
+          </FilterCarouselWrapper>
+        </motion.div>
       </SectionHeader>
 
       <Grid
