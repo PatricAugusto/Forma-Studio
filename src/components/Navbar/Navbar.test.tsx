@@ -28,24 +28,44 @@ jest.mock("framer-motion", () => ({
     {},
     {
       get: (_: object, tag: string) => {
-        const MockMotion = ({
+        const M = ({
           children,
           variants,
           initial,
           animate,
+          whileInView,
+          exit,
+          layout,
+          custom,
+          viewport,
+          transition,
           whileHover,
           whileTap,
+          style,
+          className,
           ...rest
         }: React.PropsWithChildren<Record<string, unknown>>) => {
           const Tag = tag as React.ElementType;
-          return <Tag {...rest}>{children}</Tag>;
+          return (
+            <Tag
+              style={style as React.CSSProperties}
+              className={className as string}
+              {...rest}
+            >
+              {children}
+            </Tag>
+          );
         };
-        MockMotion.displayName = `motion.${tag}`;
-        return MockMotion;
+        M.displayName = `motion.${tag}`;
+        return M;
       },
     },
   ),
   AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
+  useInView: () => true,
+  useAnimation: () => ({ start: jest.fn() }),
+  useMotionValue: () => ({ set: jest.fn() }),
+  useSpring: () => ({ set: jest.fn() }),
 }));
 
 // ─── Helper de render com tema ────────────────────────────────────────────────

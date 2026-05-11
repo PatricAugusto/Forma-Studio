@@ -22,7 +22,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body style={{ width: '100%', minHeight: '100svh' }}>
         <StyledComponentsRegistry>
           <Providers>
             {children}

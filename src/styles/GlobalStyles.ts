@@ -57,6 +57,17 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
 
    /* Melhora scroll em iOS */
   html, body {
+    width: 100%;
+    min-height: 100%;
+    min-height: 100svh;
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+  }
+
+  #__next,
+  main {
+    width: 100%;
+    min-height: 100svh;
+    overflow-x: hidden;
   }
 `
