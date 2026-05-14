@@ -143,6 +143,7 @@ export default function WorkGrid({ activeFilter }: WorkGridProps) {
               exit="exit"
               layout
               data-testid={`project-card-${project.id}`}
+              data-cursor="project"
               tabIndex={0}
               role="article"
               aria-label={`${project.title} — ${project.category}`}

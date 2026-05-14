@@ -9,6 +9,12 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
     padding: 0;
   }
 
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
   :root {
     --bg:       ${({ theme }) => theme.colors.bg};
     --surface:  ${({ theme }) => theme.colors.surface};
